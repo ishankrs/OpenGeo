@@ -86,7 +86,7 @@
         }).addTo(map);
 
         // Load GeoJSON data for Indian state boundaries
-        fetch('indian-states.geojson')
+        fetch('indian-states.geo.json')
             .then(response => response.json())
             .then(data => {
                 stateBoundariesLayer.addData(data);
