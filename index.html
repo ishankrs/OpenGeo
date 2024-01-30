@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Map with Search and Different Styles</title>
+    <title>Map with Search, State Borders, and Satellite View</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -21,13 +21,12 @@
         #locate-button {
             position: absolute;
             top: 20px;
-            right: 20px;
+            right: 10px;
             z-index: 1000;
             background-color: #fff;
             padding: 5px;
             padding-right: 10px;
-            margin-right:120px;
-
+            margin-right : 120px;
             border: 1px solid #ccc;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -49,17 +48,6 @@
             zoom: 5
         });
 
-        // Define the bounds for India
-        var southWest = L.latLng(6.4627, 68.1097); // Southwest coordinates of India
-        var northEast = L.latLng(35.6745, 97.3956); // Northeast coordinates of India
-        var bounds = L.latLngBounds(southWest, northEast);
-
-        // Restrict the map to the bounds of India
-        map.setMaxBounds(bounds);
-        map.on('drag', function () {
-            map.panInsideBounds(bounds, { animate: false });
-        });
-
         // Add an initial tile layer
         var initialTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
@@ -70,10 +58,13 @@
             Standard: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }),
+            "Satellite": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiMmlzaGFuIiwiYSI6ImNsczBuajk3ajAycWoybnBsM283NnFsdnIifQ.MH8Rp0x49fiy7CPht2_61Q', {
+                attribution: '© Mapbox'
+            }),
             Humanitarian: L.tileLayer('https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors, Humanitarian OpenStreetMap Team'
             }),
-            CycleMap: L.tileLayer('https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=dab4c262532043d481d12c906cbe8c28 ', {
+            CycleMap: L.tileLayer('https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=dab4c262532043d481d12c906cbe8c28', {
                 attribution: '© Thunderforest, OpenStreetMap contributors'
             })
             // Add more tile layers as needed
@@ -90,10 +81,33 @@
             collapsed: false
         }).addTo(map);
 
+        // GeoJSON layer for state boundaries
+        var stateBoundariesLayer = L.geoJSON(null, {
+            style: {
+                color: 'red',  // Set the border color
+                weight: 2,     // Set the border weight
+                fillOpacity: 0 // Make the fill transparent
+            }
+        }).addTo(map);
+
+        // Load GeoJSON data for Indian state boundaries
+        fetch('indian-states.json')
+            .then(response => response.json())
+            .then(data => {
+                stateBoundariesLayer.addData(data);
+            });
+
         // Event listener for result selection
         searchControl.on('markgeocode', function (e) {
             var latlng = e.geocode.center;
-            map.setView(latlng, 13); // Set the zoom level you desire
+            var state = e.geocode.properties.address.state;
+
+            // Set the view and add a marker for the searched location
+            map.setView(latlng, 13);
+            L.marker(latlng).addTo(map).bindPopup('State: ' + state).openPopup();
+
+            // Highlight the state boundary
+            highlightStateBoundary(state);
         });
 
         // Function to locate the user's current location with high accuracy
@@ -111,6 +125,19 @@
             } else {
                 alert('Geolocation is not supported by your browser.');
             }
+        }
+
+        // Function to highlight the state boundary
+        function highlightStateBoundary(state) {
+            // Reset the color of all state boundaries
+            stateBoundariesLayer.setStyle({ color: 'red' });
+
+            // Find the layer corresponding to the searched state and change its color
+            stateBoundariesLayer.eachLayer(function (layer) {
+                if (layer.feature.properties.state === state) {
+                    layer.setStyle({ color: 'blue' }); // Change the color to blue (or any other color)
+                }
+            });
         }
     </script>
 </body>
