@@ -54,12 +54,7 @@
         var northEast = L.latLng(35.6745, 97.3956); // Northeast coordinates of India
         var bounds = L.latLngBounds(southWest, northEast);
 
-        // Restrict the map to the bounds of India
-        map.setMaxBounds(bounds);
-        map.on('drag', function () {
-            map.panInsideBounds(bounds, { animate: false });
-        });
-
+     
         // Add an initial tile layer
         var initialTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
