@@ -15,18 +15,16 @@
             height: 100vh; /* 100% of the viewport height */
             margin: 0;
             padding: 0;
-            filter: saturate(200%);
         }
 
         #locate-button {
             position: absolute;
             top: 20px;
-            right: 20px;
+            right: 10px;
             z-index: 1000;
             background-color: #fff;
             padding: 5px;
-            padding-right: 10px;
-            margin-right:120px;
+            padding-right: 100px;
 
             border: 1px solid #ccc;
             cursor: pointer;
@@ -49,12 +47,6 @@
             zoom: 5
         });
 
-        // Define the bounds for India
-        var southWest = L.latLng(6.4627, 68.1097); // Southwest coordinates of India
-        var northEast = L.latLng(35.6745, 97.3956); // Northeast coordinates of India
-        var bounds = L.latLngBounds(southWest, northEast);
-
-     
         // Add an initial tile layer
         var initialTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
@@ -88,7 +80,11 @@
         // Event listener for result selection
         searchControl.on('markgeocode', function (e) {
             var latlng = e.geocode.center;
-            map.setView(latlng, 13); // Set the zoom level you desire
+            var state = e.geocode.properties.address.state;
+            
+            // Set the view and add a marker for the searched location
+            map.setView(latlng, 13);
+            L.marker(latlng).addTo(map).bindPopup('State: ' + state).openPopup();
         });
 
         // Function to locate the user's current location with high accuracy
