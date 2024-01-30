@@ -15,7 +15,6 @@
             height: 100vh; /* 100% of the viewport height */
             margin: 0;
             padding: 0;
-            filter: saturate(200%);
         }
 
         #locate-button {
@@ -25,9 +24,7 @@
             z-index: 1000;
             background-color: #fff;
             padding: 5px;
-            padding-right: 10px;
-            margin-right:120px;
-
+            padding-right: 100px;
             border: 1px solid #ccc;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -79,14 +76,33 @@
             collapsed: false
         }).addTo(map);
 
+        // GeoJSON layer for state boundaries
+        var stateBoundariesLayer = L.geoJSON(null, {
+            style: {
+                color: 'red',  // Set the border color
+                weight: 2,     // Set the border weight
+                fillOpacity: 0 // Make the fill transparent
+            }
+        }).addTo(map);
+
+        // Load GeoJSON data for Indian state boundaries
+        fetch('indian-states.geojson')
+            .then(response => response.json())
+            .then(data => {
+                stateBoundariesLayer.addData(data);
+            });
+
         // Event listener for result selection
         searchControl.on('markgeocode', function (e) {
             var latlng = e.geocode.center;
             var state = e.geocode.properties.address.state;
-            
+
             // Set the view and add a marker for the searched location
             map.setView(latlng, 13);
             L.marker(latlng).addTo(map).bindPopup('State: ' + state).openPopup();
+
+            // Highlight the state boundary
+            highlightStateBoundary(state);
         });
 
         // Function to locate the user's current location with high accuracy
@@ -104,6 +120,19 @@
             } else {
                 alert('Geolocation is not supported by your browser.');
             }
+        }
+
+        // Function to highlight the state boundary
+        function highlightStateBoundary(state) {
+            // Reset the color of all state boundaries
+            stateBoundariesLayer.setStyle({ color: 'red' });
+
+            // Find the layer corresponding to the searched state and change its color
+            stateBoundariesLayer.eachLayer(function (layer) {
+                if (layer.feature.properties.state === state) {
+                    layer.setStyle({ color: 'blue' }); // Change the color to blue (or any other color)
+                }
+            });
         }
     </script>
 </body>
