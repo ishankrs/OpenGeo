@@ -49,23 +49,23 @@
 
         // Add an initial tile layer
         var initialTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+            attribution: 'Ishan,Peeyush,karan,vineet'
         }).addTo(map);
 
         // Define available tile layers with different styles
         var tileLayers = {
             Standard: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: 'Ishan,Peeyush,karan,vineet',
+                attribution: 'Ishan,Peeyush,karan,vineet'
             }),
             "Satellite": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiMmlzaGFuIiwiYSI6ImNsczBuajk3ajAycWoybnBsM283NnFsdnIifQ.MH8Rp0x49fiy7CPht2_61Q', {
                 attribution: 'Ishan,Peeyush,karan,vineet',
                 maxZoom: 18
             }),
             Humanitarian: L.tileLayer('https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-                attribution: 'Ishan,Peeyush,karan,vineet',
+                attribution: 'Ishan,Peeyush,karan,vineet'
             }),
             CycleMap: L.tileLayer('https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=dab4c262532043d481d12c906cbe8c28 ', {
-                attribution: 'Ishan,Peeyush,karan,vineet',
+                attribution: 'Ishan,Peeyush,karan,vineet'
             })
             // Add more tile layers as needed
         };
