@@ -15,7 +15,7 @@
             height: 100vh; /* 100% of the viewport height */
             margin: 0;
             padding: 0;
-            filter: saturate(200%); /* Increase saturation by 200% */
+            filter: saturate(200%);
         }
 
         #locate-button {
@@ -43,7 +43,74 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script>
-        // Your existing JavaScript code remains unchanged
+        var map = L.map('map', {
+            center: [20.5937, 78.9629],
+            zoom: 5
+        });
+
+        // Define the bounds for India
+        var southWest = L.latLng(6.4627, 68.1097); // Southwest coordinates of India
+        var northEast = L.latLng(35.6745, 97.3956); // Northeast coordinates of India
+        var bounds = L.latLngBounds(southWest, northEast);
+
+        // Restrict the map to the bounds of India
+        map.setMaxBounds(bounds);
+        map.on('drag', function () {
+            map.panInsideBounds(bounds, { animate: false });
+        });
+
+        // Add an initial tile layer
+        var initialTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Define available tile layers with different styles
+        var tileLayers = {
+            Standard: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }),
+            Humanitarian: L.tileLayer('https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors, Humanitarian OpenStreetMap Team'
+            }),
+            CycleMap: L.tileLayer('https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=dab4c262532043d481d12c906cbe8c28 ', {
+                attribution: '© Thunderforest, OpenStreetMap contributors'
+            })
+            // Add more tile layers as needed
+        };
+
+        // Add a layer control to switch between different map styles
+        L.control.layers(tileLayers, null, { position: 'topright' }).addTo(map);
+
+        // Add search control
+        var searchControl = new L.Control.Geocoder({
+            defaultMarkGeocode: false,
+            placeholder: 'Search for a place in India',
+            geocoder: L.Control.Geocoder.nominatim(),
+            collapsed: false
+        }).addTo(map);
+
+        // Event listener for result selection
+        searchControl.on('markgeocode', function (e) {
+            var latlng = e.geocode.center;
+            map.setView(latlng, 13); // Set the zoom level you desire
+        });
+
+        // Function to locate the user's current location with high accuracy
+        function locateUser() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var latlng = [position.coords.latitude, position.coords.longitude];
+                    // Set the zoom level and use high accuracy location
+                    map.setView(latlng, 18);
+                    L.marker(latlng).addTo(map); // Optional: Add a marker for the user's location
+                }, function (error) {
+                    console.error('Error getting current location:', error.message);
+                    alert('Error getting current location. Please make sure location services are enabled.');
+                }, { enableHighAccuracy: true, maximumAge: 30000, timeout: 27000 });
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        }
     </script>
 </body>
 
