@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+#locate-button {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    z-index: 1000;
+    background-color: #fff;
+    padding: 5px;
+    padding-right: 100px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
