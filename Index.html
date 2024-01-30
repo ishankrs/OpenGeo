@@ -15,6 +15,7 @@
             height: 100vh; /* 100% of the viewport height */
             margin: 0;
             padding: 0;
+            filter: saturate(200%);
         }
 
         #locate-button {
@@ -24,7 +25,8 @@
             z-index: 1000;
             background-color: #fff;
             padding: 5px;
-            padding-right: 100px;
+            padding-right: 10px;
+            margin-right:120px;
             border: 1px solid #ccc;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -91,7 +93,7 @@
         }).addTo(map);
 
         // Load GeoJSON data for Indian state boundaries
-        fetch('indian-states.geo.json')
+        fetch('indian-states.json')
             .then(response => response.json())
             .then(data => {
                 stateBoundariesLayer.addData(data);
