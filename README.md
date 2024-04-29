@@ -28,7 +28,7 @@ To use the map, simply open the `index.html` file in a web browser. You can sear
 - Mapbox: © Mapbox
 - Humanitarian OpenStreetMap Team: © OpenStreetMap contributors, Humanitarian OpenStreetMap Team
 - Thunderforest: © Thunderforest, OpenStreetMap contributors
-- # ishan kashyap
+- **ishan kashyap**
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
