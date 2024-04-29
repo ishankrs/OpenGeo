@@ -24,11 +24,11 @@ No installation is required. Simply include the necessary libraries via CDN.
 To use the map, simply open the `index.html` file in a web browser. You can search for a place in India, switch between different map styles, and get your current location.
 
 ## Credits
-- ##ishan kashyap
 - Leaflet: © OpenStreetMap contributors
 - Mapbox: © Mapbox
 - Humanitarian OpenStreetMap Team: © OpenStreetMap contributors, Humanitarian OpenStreetMap Team
 - Thunderforest: © Thunderforest, OpenStreetMap contributors
+- # ishan kashyap
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
